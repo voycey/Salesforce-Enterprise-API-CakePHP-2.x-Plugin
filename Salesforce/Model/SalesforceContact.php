@@ -1,5 +1,5 @@
 <?php
-    App::uses('Salesforce', 'Model');
+    App::uses('Salesforce', 'Salesforce.Model');
     App::import('Utility', 'Xml');
     /**
      * Class SalesforceContact

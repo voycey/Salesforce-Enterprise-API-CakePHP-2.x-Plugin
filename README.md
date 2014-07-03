@@ -78,28 +78,28 @@ in" Salesforce integration. -->
 
 #Installation
 
-1. Clone the Developerforce PHP toolkit into app/Vendor/salesforce - you
-   should have a path that looks like app/Vendor/salesforce/soapclient 
+1. Clone the Developerforce PHP toolkit into app/Vendor/salesforce
+   you should have a path that looks like app/Vendor/salesforce/soapclient
 2. Install this Plugin into app/Plugins/Salesforce
 3. Place the following code into database.php
 
 ```php
  var $sflive = array(
             'datasource' => 'SalesforceSource',
-            'standard_wsdl' => '',
+            'standard_wsdl' => 'enterprise.wsdl.xml',
             'dynamic_mode' => false,
-            'my_wsdl' => 'enterprise.wsdl.xml',
+            'my_wsdl' => 'enterprise.wsdl.xml',//optional but recommended
             'username' => 'YourSalesForceUsername',
             'password' => 'YourSFPassword+SecurityToken'
         );
 ```
-4. Download your enterprise.wsdl.xml and place it in app/Config
+4. Download your enterprise.wsdl.xml and place it in app/Config (if you dont plan on using this see "Development Mode" below
 5. Enable the plugin in your bootstrap.php:
 
 ```php
 CakePlugin::load(
         array(
-            'Salesforce' => array('routes' => true, 'bootstrap' => true)
+            'Salesforce' => array('bootstrap' => true)
   )
 );
 ```
@@ -135,7 +135,7 @@ class SforceBaseClient {
 ***
 ##Usage:
 So the usage is fairly simple, There are some examples in
-app/Plugin/Salesforce/Controllers/SalesforceController.php but essentially it
+app/Plugin/Salesforce/Controllers/TestController.php but essentially it
 is:
 
 ```php
@@ -165,7 +165,7 @@ The easiest way would be to just create some new models for the entities you
 want to access in app/Plugin/Salesforce/Model - for example:
 ######SalesforceContract.php
 ```php
-    App::uses('Salesforce', 'Model');
+    App::uses('Salesforce', 'Salesforce.Model');
     App::import('Utility', 'Xml');
     /**
      * Class SalesforceContract
@@ -210,4 +210,5 @@ recommended.
 
 This is used instead of the "Standard WSDL" that is provided by Salesforce -
 mostly because that Standard WSDL wont include all of your custom fields!
+
 

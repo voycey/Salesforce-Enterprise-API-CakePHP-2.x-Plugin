@@ -69,12 +69,6 @@
         public function __construct($config) {
             //Construct API version in this to go to SalesforceBaseClass!
             parent::__construct($config);
-            Cache::config('short', array(
-                'engine' => 'APC',
-                'duration' => '+1 hours', //This is set to 1 hour as the Salesforce Session time out is 2 hours
-                'probability' => 100,
-                'prefix' => 'salesforce_short_'
-            ));
             $this->_baseConfig = $config;
             $this->connect();
         }
