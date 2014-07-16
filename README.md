@@ -212,3 +212,10 @@ This is used instead of the "Standard WSDL" that is provided by Salesforce -
 mostly because that Standard WSDL wont include all of your custom fields!
 
 
+Troubleshooting
+---------------
+
+:I have created new fields and they show in the result array from Salesforce but the value hasn't been updated.
+
+You probably haven't downloaded the updated wsdl from Salesforce - if you are using development mode try clearing your cache as it caches the schema.
+
