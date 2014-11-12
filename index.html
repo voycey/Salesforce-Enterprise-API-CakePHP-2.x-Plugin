@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Salesforce Enterprise API Plugin for CakePHP 2.x by voycey</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Salesforce Enterprise API Plugin for CakePHP 2.x</h1>
+        <h2>Use Cake CRUD methods to manipulate Salesforce Enterprise</h2>
+        <a href="https://github.com/voycey/Salesforce-Enterprise-API-CakePHP-2.x-Plugin" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="cakephp-salesforce-enterprise-plugin" class="anchor" href="#cakephp-salesforce-enterprise-plugin" aria-hidden="true"><span class="octicon octicon-link"></span></a>CakePHP Salesforce Enterprise Plugin</h1>
+
+<p>A plugin and datasource that allows access to salesforce via CakePHP CRUD methods for Salesforce Enterprise Entities.</p>
+
+<p>I have decided to release this as Open Source as we are moving away from this method, I can offer basic support for this, if you have any alterations to make please submit a pull request and ill merge it in when I can!</p>
+
+<hr>
+
+<p><a href="https://github.com/Requires" class="user-mention">@Requires</a> Force.com / Developer Force PHP Toolkit</p>
+
+<p><a href="https://github.com/Requires" class="user-mention">@Requires</a> CakePHP 2.x (Tested on Cake 2.4.3)</p>
+
+<p><a href="https://github.com/Requires" class="user-mention">@Requires</a> Enterprise Salesforce</p>
+
+<p><a href="https://github.com/Requires" class="user-mention">@Requires</a> APC Enabled (Can be changed in code)</p>
+
+<p><a href="https://github.com/Recommended" class="user-mention">@Recommended</a>:</p>
+
+<ul>
+<li>Your Enterprise WSDL</li>
+<li>Knowledge of Salesforce API Versions</li>
+</ul>
+
+<hr>
+
+<h2>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span class="octicon octicon-link"></span></a>Background</h2>
+
+<p>This plugin was created to allow easy interaction with a Salesforce Enterprise
+instance either by using a WSDL or by automagically fetching the fields for a
+specific entity. It provides a unified method of querying, editing, saving and
+deleting on several (tested) entities (Currently <strong>Contacts</strong>, <strong>Leads</strong> and
+<strong>Accounts</strong>), and it <strong>SHOULD</strong> work on all other entities!</p>
+
+<h3>
+<a id="what-does-it-provide" class="anchor" href="#what-does-it-provide" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does it provide?</h3>
+
+<p>Basically it allows you to use standard CakePHP find(), save() and delete()
+methods on models which map to Salesforce Entities. This means that if you
+want to find all users who work for X company you could simply issue this:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span><span class="pl-v">SalesforceContact</span><span class="pl-ko">-&gt;</span>find(<span class="pl-s1"><span class="pl-pds">'</span>all<span class="pl-pds">'</span></span>, <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>conditions<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>Company<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span></span>
+<span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>Acme inc<span class="pl-pds">'</span></span>)));</span></pre></div>
+
+<p>And this will return you a lovely standard CakePHP data array which you can
+manipulate and use however you want.</p>
+
+<h3>
+<a id="why-is-it-needed" class="anchor" href="#why-is-it-needed" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why Is it needed?</h3>
+
+<p>Salesforce has a weird way of allowing you to query it's entities, everything
+would be really simple if with SOQL (with salesforce's own flavour of SQL) you
+could simply issue a "SELECT * FROM Contacts" - however you cant do this - you
+need to specify which fields you want to select. This is fine if you only use
+the standard fields but probably 95% of all Enterprise instances of Salesforce
+have custom fields implemented.</p>
+
+<h3>
+<a id="why-is-it-unique" class="anchor" href="#why-is-it-unique" aria-hidden="true"><span class="octicon octicon-link"></span></a>Why is it unique?</h3>
+
+<p>Surely it is just a SOAP client I hear you asking? Well yes and no! It uses
+the Developer force toolkit as transport to fetch the items but it does a fair
+few clever things underneath the hood aswell, <strong>Maybe most importantly it
+prevents the need for having to pass in a HUGE list of fields to each request
+you want to make to Salesforce or having to create custom queries - it can all
+be done with cakes "find" method</strong> the prime of which is the ability to
+function without a WSDL file. The WSDL file describes your companies data
+structures, it is useful for querying a web service but again the Salesforce
+one has a few quirks, namely with how it labels specific fields and handles
+ID's, and because of this getting a CakePHP schema to function properly is a
+little like smashing your head against a brick wall. </p>
+
+
+
+<h1>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<ol>
+<li>Clone the Developerforce PHP toolkit into app/Vendor/salesforce
+you should have a path that looks like app/Vendor/salesforce/soapclient</li>
+<li>Install this Plugin into app/Plugins/Salesforce</li>
+<li>Place the following code into database.php</li>
+</ol>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"> <span class="pl-s">var</span> <span class="pl-v"><span class="pl-pdv">$</span>sflive</span> <span class="pl-ko">=</span> <span class="pl-sf">array</span>(</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>datasource<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>SalesforceSource<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>standard_wsdl<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>enterprise.wsdl.xml<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>dynamic_mode<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-c1">false</span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>my_wsdl<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>enterprise.wsdl.xml<span class="pl-pds">'</span></span>,<span class="pl-c"><span class="pl-pdc">//</span>optional but recommended</span></span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>username<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>YourSalesForceUsername<span class="pl-pds">'</span></span>,</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>password<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-s1"><span class="pl-pds">'</span>YourSFPassword+SecurityToken<span class="pl-pds">'</span></span></span>
+<span class="pl-s2">        );</span></pre></div>
+
+<ol>
+<li>Download your enterprise.wsdl.xml and place it in app/Config (if you dont plan on using this see "Development Mode" below</li>
+<li>Enable the plugin in your bootstrap.php:</li>
+</ol>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-sc">CakePlugin</span><span class="pl-ko">::</span>load(</span>
+<span class="pl-s2">        <span class="pl-sf">array</span>(</span>
+<span class="pl-s2">            <span class="pl-s1"><span class="pl-pds">'</span>Salesforce<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>bootstrap<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-c1">true</span>)</span>
+<span class="pl-s2">  )</span>
+<span class="pl-s2">);</span></pre></div>
+
+<p>Ok so that is the basic setup now it needs a little configuration in order to
+match your Salesforce setup.</p>
+
+<p>One of the other quirks of Salesforce is that it has different API versions
+that have different functionality (AND different default fields). This is
+where you might fall down with it:</p>
+
+<ol>
+<li>First open up your enterprise.wsdl.xml and look in the comments at the top
+for the following lines:</li>
+</ol>
+
+<pre><code>Salesforce.com Enterprise Web Services API Version 29.0
+Generated on 2013-11-29 01:39:56 +0000.
+</code></pre>
+
+<p>That is your API Version!</p>
+
+<ol>
+<li>Now you need to tell the soapclient to use this XML Version:
+in the file app/Vendor/salesforce/soapclient/SForceBaseClient.php find the
+following lines and ensure they are set to the same API version as the version
+above:</li>
+</ol>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-s">class</span> <span class="pl-entc">SforceBaseClient</span> {</span>
+<span class="pl-s2">    <span class="pl-s">protected</span> <span class="pl-v"><span class="pl-pdv">$</span>sforce</span>;</span>
+<span class="pl-s2">  <span class="pl-s">protected</span> <span class="pl-v"><span class="pl-pdv">$</span>sessionId</span>;</span>
+<span class="pl-s2">  <span class="pl-s">protected</span> <span class="pl-v"><span class="pl-pdv">$</span>location</span>;</span>
+<span class="pl-s2">  <span class="pl-s">protected</span> <span class="pl-v"><span class="pl-pdv">$</span>version</span> <span class="pl-ko">=</span> <span class="pl-s1"><span class="pl-pds">'</span>29.0<span class="pl-pds">'</span></span>;</span></pre></div>
+
+<hr>
+
+<h2>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage:</h2>
+
+<p>So the usage is fairly simple, There are some examples in
+app/Plugin/Salesforce/Controllers/TestController.php but essentially it
+is:</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span>loadModel(<span class="pl-s1"><span class="pl-pds">'</span>Salesforce.SalesforceContact<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span><span class="pl-v">SalesforceContact</span><span class="pl-ko">-&gt;</span>find(<span class="pl-s1"><span class="pl-pds">'</span>all<span class="pl-pds">'</span></span>, <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>conditions<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>Company<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span></span>
+<span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>Acme inc<span class="pl-pds">'</span></span>)));</span></pre></div>
+
+<p>or if you want to interact with Accounts</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span>loadModel(<span class="pl-s1"><span class="pl-pds">'</span>Salesforce.SalesforceAccount<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span><span class="pl-v">SalesforceAccount</span><span class="pl-ko">-&gt;</span>find(<span class="pl-s1"><span class="pl-pds">'</span>all<span class="pl-pds">'</span></span>, <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>conditions<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span></span>
+<span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>Acme inc<span class="pl-pds">'</span></span>)));</span></pre></div>
+
+<h2>
+<a id="wait-i-want-to-interact-with-something-like-contracts" class="anchor" href="#wait-i-want-to-interact-with-something-like-contracts" aria-hidden="true"><span class="octicon octicon-link"></span></a>WAIT! I want to interact with something like Contracts</h2>
+
+<p>Ok so as stated this is untested (Mostly because I dont have any contracts to
+test with) <strong>BUT</strong> there is no reason why this shouldn't work, the plugin is
+agnostic of the entity that it is using as it simply issues commands via SOQL
+and then processes the return data. I would say that if you can fetch fields
+using the Salesforce Developer Workbench (Google it!) then you can use this to
+do it.</p>
+
+<h3>
+<a id="how" class="anchor" href="#how" aria-hidden="true"><span class="octicon octicon-link"></span></a>How?</h3>
+
+<p>The easiest way would be to just create some new models for the entities you
+want to access in app/Plugin/Salesforce/Model - for example:</p>
+
+<h6>
+<a id="salesforcecontractphp" class="anchor" href="#salesforcecontractphp" aria-hidden="true"><span class="octicon octicon-link"></span></a>SalesforceContract.php</h6>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2">    <span class="pl-sc">App</span><span class="pl-ko">::</span>uses(<span class="pl-s1"><span class="pl-pds">'</span>Salesforce<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>Salesforce.Model<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2">    <span class="pl-sc">App</span><span class="pl-ko">::</span>import(<span class="pl-s1"><span class="pl-pds">'</span>Utility<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>Xml<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2">    <span class="pl-c"><span class="pl-pdc">/**</span></span></span>
+<span class="pl-s2"><span class="pl-c">     * Class SalesforceContract</span></span>
+<span class="pl-s2"><span class="pl-c">     <span class="pl-pdc">*/</span></span></span>
+<span class="pl-s2"></span>
+<span class="pl-s2">    <span class="pl-s">class</span> <span class="pl-entc">SalesforceContract</span> <span class="pl-s">extends</span> <span class="pl-eoi">Salesforce</span> {</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">        <span class="pl-s">public</span> <span class="pl-s">function</span> <span class="pl-sf">__construct</span>(<span class="pl-v"><span class="pl-pdv">$</span>id</span> <span class="pl-ko">=</span> <span class="pl-c1">false</span>, <span class="pl-v"><span class="pl-pdv">$</span>table</span> <span class="pl-ko">=</span> <span class="pl-c1">null</span>, <span class="pl-v"><span class="pl-pdv">$</span>ds</span> <span class="pl-ko">=</span> <span class="pl-c1">null</span>) {</span>
+<span class="pl-s2">            <span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span><span class="pl-v">name</span> <span class="pl-ko">=</span> <span class="pl-s1"><span class="pl-pds">"</span>Contract<span class="pl-pds">"</span></span>;</span>
+<span class="pl-s2">            <span class="pl-s">parent</span><span class="pl-ko">::</span>__construct(<span class="pl-v"><span class="pl-pdv">$</span>id</span>, <span class="pl-v"><span class="pl-pdv">$</span>table</span>, <span class="pl-v"><span class="pl-pdv">$</span>ds</span>);</span>
+<span class="pl-s2"></span>
+<span class="pl-s2">        }</span>
+<span class="pl-s2">    }</span>
+<span class="pl-s2"></span><span class="pl-pse"><span class="pl-s2">?</span>&gt;</span></pre></div>
+
+<p>This would then allow you to query the Contract table in Salesforce using</p>
+
+<div class="highlight highlight-php"><pre><span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span>loadModel(<span class="pl-s1"><span class="pl-pds">'</span>Salesforce.SalesforceContract<span class="pl-pds">'</span></span>);</span>
+<span class="pl-s2"><span class="pl-v"><span class="pl-pdv">$</span>this</span><span class="pl-ko">-&gt;</span><span class="pl-v">SalesforceContract</span><span class="pl-ko">-&gt;</span>find(<span class="pl-s1"><span class="pl-pds">'</span>all<span class="pl-pds">'</span></span>, <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>conditions<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span> <span class="pl-sf">array</span>(<span class="pl-s1"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span> <span class="pl-ko">=&gt;</span></span>
+<span class="pl-s2"><span class="pl-s1"><span class="pl-pds">'</span>Acme inc<span class="pl-pds">'</span></span>)));</span></pre></div>
+
+<h2>
+<a id="advanced-configuration" class="anchor" href="#advanced-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced Configuration</h2>
+
+<p>So I have tried to keep this as simple as possible with not much configuration
+other than absolutely necessary but the plugin does have a few options:</p>
+
+<h3>
+<a id="development-mode" class="anchor" href="#development-mode" aria-hidden="true"><span class="octicon octicon-link"></span></a>Development Mode</h3>
+
+<p>If you set <strong>dynamic_mode = true</strong> in database.php this will then not use your
+WSDL, it will try and create a schema from your Salesforce instance for the
+model you are using, this isnt 100% foolproof but if you are developing a lot
+and people are making changes to your Saleforce instance regularly this will
+be a godsend, mostly because Salesforce gets really pissy when you try and
+include fields that arent there (Or Omit fields that it thinks you should
+have). </p>
+
+<p>It should cache the schema it creates but obviously fetching this schema from
+Salesforce takes time so using this on a production server really isnt
+recommended.</p>
+
+<p>This is used instead of the "Standard WSDL" that is provided by Salesforce -
+mostly because that Standard WSDL wont include all of your custom fields!</p>
+
+<h2>
+<a id="troubleshooting" class="anchor" href="#troubleshooting" aria-hidden="true"><span class="octicon octicon-link"></span></a>Troubleshooting</h2>
+
+<p>:I have created new fields and they show in the result array from Salesforce but the value hasn't been updated.</p>
+
+<p>You probably haven't downloaded the updated wsdl from Salesforce - if you are using development mode try clearing your cache as it caches the schema.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/voycey/Salesforce-Enterprise-API-CakePHP-2.x-Plugin/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/voycey/Salesforce-Enterprise-API-CakePHP-2.x-Plugin/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/voycey/Salesforce-Enterprise-API-CakePHP-2.x-Plugin"></a> is maintained by <a href="https://github.com/voycey">voycey</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
