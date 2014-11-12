@@ -1,11 +1,8 @@
 CakePHP Salesforce Enterprise Plugin
 =========================
-A plugin that allows access to CakePHP CRUD methods for Salesforce Enterprise
-Entities.
+A plugin and datasource that allows access to salesforce via CakePHP CRUD methods for Salesforce Enterprise Entities.
 
-Contact me for affordable pricing (Certainly much less than it would cost for
-you to code it yourself) and more information about this Plugin at
-hello@danielvoyce.com
+I have decided to release this as Open Source as we are moving away from this method, I can offer basic support for this, if you have any alterations to make please submit a pull request and ill merge it in when I can!
 
 ***
 @Requires Force.com / Developer Force PHP Toolkit
