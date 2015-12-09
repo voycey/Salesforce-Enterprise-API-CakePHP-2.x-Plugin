@@ -4,10 +4,12 @@ A plugin and datasource that allows access to salesforce via CakePHP CRUD method
 
 I have decided to release this as Open Source as we are moving away from this method, I can offer basic support for this, if you have any alterations to make please submit a pull request and ill merge it in when I can!
 
+**For Cake 3.x I have started on a new style data source which can be found at https://github.com/voycey/salesforce-datasource-cakephp-3.x** (Currently in early alpha)
+
 ***
 @Requires Force.com / Developer Force PHP Toolkit
 
-@Requires CakePHP 2.x (Tested on Cake 2.4.3)
+@Requires CakePHP 2.x (Tested on Cake 2.7)
 
 @Requires Enterprise Salesforce
 
